@@ -4,6 +4,7 @@ import Home from '../pages/components/home';
 import Contacto from '../pages/components/contacto';
 import Perfil from '../pages/components/perfil';
 import Videos from '../pages/containers/videos';
+import NotFound from '../pages/components/NotFound';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import reducer from '../reducers/index';
@@ -11,7 +12,7 @@ import { Map as map } from 'immutable';
 import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { BrowserRouter, Route} from 'react-router-dom'
+import { BrowserRouter, Route, Switch, Redirect} from 'react-router-dom'
 import Header from '../pages/components/header'
 // function logger({ getState, dispatch}) {
 //   return (next) => {
@@ -53,11 +54,18 @@ render(
   <BrowserRouter>
     <Provider store={store}>
       <Fragment>
-      <Header />
-      <Route exact path="/" component={Home} />
-      <Route exact path="/videos" component={Videos} />
-      <Route exact path="/contacto" component={Contacto} />
-      <Route exact path="/Perfil" component={Perfil} />
+        <Header />
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Redirect from="/inicio" to="/"/>
+          <Route exact path="/videos" component={Videos} />
+          <Redirect from="/v" to="/videos"/>
+          <Route exact path="/contacto" component={Contacto} />
+          <Redirect from="/about" to="/contacto"/>
+          <Route exact path="/perfil" component={Perfil} />
+          <Redirect from="/profile" to="/perfil"/>
+          <Route component={NotFound} />
+        </Switch>
       </Fragment>
     </Provider>
   </BrowserRouter>
